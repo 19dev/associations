@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<table border="1">
+	<tr>
+		<td>Id</td>
+		<td><%= @customer.id %></td>
+	</tr>
+	<tr>
+		<td>Name</td>
+		<td><%= @customer.name %></td>
+	</tr>
+</table>
+
+<%= link_to 'Edit', edit_customer_path(@customer) %> |
+<%= link_to 'Back', customers_path %>
