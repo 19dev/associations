@@ -44,9 +44,10 @@ Modeller,
       has_many :physicians, :through => :appointments
     end
 
-    class Order < ActiveRecord::Base
-      belongs_to :customer
-      attr_accessible :order_date
+    class Appointment < ActiveRecord::Base
+      attr_accessible :appointment_date, :physician_id, :patient_id
+      belongs_to :physician
+      belongs_to :patient
     end
 
 Test,
