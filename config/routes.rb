@@ -1,4 +1,10 @@
 TutorialAssociation::Application.routes.draw do
+  resources :products
+
+  resources :employees
+
+  resources :pictures
+
   resources :appointments
 
   resources :patients

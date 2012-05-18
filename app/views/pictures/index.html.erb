@@ -1,0 +1,27 @@
+<h1>Listing pictures</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Imageable</th>
+    <th>Imageable type</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pictures.each do |picture| %>
+  <tr>
+    <td><%= picture.name %></td>
+    <td><%= picture.imageable_id %></td>
+    <td><%= picture.imageable_type %></td>
+    <td><%= link_to 'Show', picture %></td>
+    <td><%= link_to 'Edit', edit_picture_path(picture) %></td>
+    <td><%= link_to 'Destroy', picture, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Picture', new_picture_path %>

@@ -58,3 +58,30 @@ Test,
     Patient.first.appointments
     Patient.first.appointments.first.physician
 
+## 2.9 Polymorphic Associations
+
+Modeller,
+
+  class Picture < ActiveRecord::Base
+    attr_accessible :imageable_id, :imageable_type, :name
+    belongs_to :imageable, :polymorphic => true
+  end
+  class Employee < ActiveRecord::Base
+    attr_accessible :name
+    has_many :pictures, :as => :imageable
+  end
+  class Product < ActiveRecord::Base
+    attr_accessible :name
+    has_many :pictures, :as => :imageable
+  end
+
+Test,
+
+  Employee.create(:name => 'Mennan')
+  Employee.first.pictures
+  Employee.first.pictures.create(:name => 'men.jpg', :imageable_type => 'r')
+  Employee.first.pictures.create(:name => 'nan.jpg', :imageable_type => 'r')
+  Employee.first.pictures
+
+  Product.first.pictures
+
