@@ -194,3 +194,17 @@ Test,
 
   o.line_items
   li.order_id
+
+eğer, `li` üzerinden `order` a ve onun üzerinden de `customer` a ulaşmak
+istersen,
+
+  class LineItem < ActiveRecord::Base
+    belongs_to :order, :include => :customer
+  end
+
+demen yeterli. Bu durumda,
+
+  li.order
+  li.order.customer
+
+iş görür.
