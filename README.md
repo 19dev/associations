@@ -30,6 +30,8 @@ Test,
 - has_one :through
 - has_and_belongs_to_many
 
+![has many through](http://guides.rubyonrails.org/images/has_many_through.png)
+
 Modeller,
 
     class Physician < ActiveRecord::Base
@@ -58,7 +60,17 @@ Test,
     Patient.first.appointments
     Patient.first.appointments.first.physician
 
+Ayrıca,
+![has one through](http://guides.rubyonrails.org/images/has_one_through.png)
+![has and belongs to many](http://guides.rubyonrails.org/images/habtm.png)
+
+`create_table :assemblies_parts, :id => false do |t|`
+
+id:false model üretilmesini engelliyor.
+
 ## 2.9 Polymorphic Associations
+
+![polymorphic](http://guides.rubyonrails.org/images/polymorphic.png)
 
 Modeller,
 
@@ -85,3 +97,76 @@ Test,
 
   Product.first.pictures
 
+## 3.5 Bi-directional Associations
+
+![resim](http://guides.rubyonrails.org/images/has_many.png)
+
+(ESKI) Modeller,
+
+    class Customer < ActiveRecord::Base
+        attr_accessible :name
+        has_many :orders, :dependent => :destroy
+    end
+
+    class Order < ActiveRecord::Base
+        attr_accessible :order_date
+        belongs_to :customer
+    end
+
+Test,
+
+    Customer.create(:name => 'Kuruyemişçi Mahmut')
+    Customer.last.orders.create(:order_date => Time.now)
+
+    c = Customer.last
+    o = c.orders.last
+    c.name == o.customer.name # => true
+    c.name = 'simitci'
+    c.name == o.customer.name # => false
+
+olan nedir? Verinin iki ayrı kopyası tutulmakta ve bir taraf diğerinden habersiz
+durumdadır. Çözümü ise "bi-directional associations"
+
+(YENİ) Modeller,
+
+    class Customer < ActiveRecord::Base
+        attr_accessible :name
+        has_many :orders, :dependent => :destroy, :inverse_of => :customer
+    end
+
+    class Order < ActiveRecord::Base
+        attr_accessible :order_date
+        belongs_to :customer, :inverse_of => :orders
+    end
+
+Test,
+
+    Customer.create(:name => 'Kuruyemişçi Mahmut')
+    Customer.last.orders.create(:order_date => Time.now)
+
+    c = Customer.last
+    o = c.orders.last
+    c.name == o.customer.name # => true
+    c.name = 'simitci'
+    c.name == o.customer.name # => true
+
+kısıtlamaları vardır.
+
+# 4 Detailed Association Reference
+
+Bazı trikler,
+
+  > c = Customer.create(:name => 'Simitci')
+  > o = c.orders.create(:order_date => Time.now)
+
+  > o.customer
+  > c.orders
+
+  > o.customer = Customer.create(:name => 'manav')
+  > o.customer.name
+  'manav'
+
+  > o.build_customer(:name => 'market')   # new
+  > o.create_customer(:name => 'market')  # create
+  > o.customer.name
+  'market'

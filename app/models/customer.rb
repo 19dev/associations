@@ -1,4 +1,4 @@
 class Customer < ActiveRecord::Base
-  has_many :orders, :dependent => :destroy
   attr_accessible :name
+  has_many :orders, :dependent => :destroy, :inverse_of => :customer
 end
