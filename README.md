@@ -208,3 +208,58 @@ demen yeterli. Bu durumda,
   li.order.customer
 
 iş görür.
+
+### 4.1.3 Do Any Associated Objects Exist?
+
+Test,
+
+  if o.customer.nil?
+    @msg = "No customer found for this order"
+  end
+
+## 4.3 hasmany Association Reference
+
+Customer i belirtmeksizin, yeni bir Order oluşturmak/sonuna eklemek,
+
+  > c.orders << Order.create(:order_date => Time.now)
+
+Son Order i silmek istersek,
+
+  > c.orders.delete(Order.last)
+
+Order id lerini görmek istersen,
+
+  > c.order_ids
+  [14, 42]
+
+Ekleme silme yapabilirsin,
+
+  > c.order_ids = [14, 23]
+
+böylelikle arkada 42 id li Order silinirken, var olan 23 nolu id bu müşterinin
+Order u olur. Bu işlem öncesinde,
+
+  > Order.find(23).customer.name
+  'foo'
+
+iken işlem sonrasında,
+
+  > Order.find(23).customer.name
+  'bar'
+
+olacaktır ki `bar`, `c` değişkeninde tutulan müşterinin adıdır (`# c.name =>
+'bar'`).
+
+Ararken,
+
+  > @orders = c.orders.where(["order_date < ? ", 2.minutes.ago])
+
+böyle hazırlanır ya böyle
+
+  > @orders[0]
+
+ya da böyle,
+
+  > @orders.first
+
+şeklinde veritabanından sorgulanır.
