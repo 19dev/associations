@@ -1,4 +1,6 @@
 TutorialAssociation::Application.routes.draw do
+  resources :line_items
+
   resources :products
 
   resources :employees

@@ -170,3 +170,27 @@ Bazı trikler,
   > o.create_customer(:name => 'market')  # create
   > o.customer.name
   'market'
+
+#### 4.1.2.7 :include
+
+Modeller,
+
+  class LineItem < ActiveRecord::Base
+    belongs_to :order
+  end
+  class Order < ActiveRecord::Base
+    belongs_to :customer
+    has_many :line_items
+  end
+  class Customer < ActiveRecord::Base
+    has_many :orders
+  end
+
+Test,
+
+  c = Customer.create(:name => 'yesil')
+  o = c.orders.create(:order_date => Time.now)
+  li = o.line_items.create(:name => 'foo')
+
+  o.line_items
+  li.order_id
