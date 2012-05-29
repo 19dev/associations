@@ -74,28 +74,28 @@ id:false model üretilmesini engelliyor.
 
 Modeller,
 
-  class Picture < ActiveRecord::Base
-    attr_accessible :imageable_id, :imageable_type, :name
-    belongs_to :imageable, :polymorphic => true
-  end
-  class Employee < ActiveRecord::Base
-    attr_accessible :name
-    has_many :pictures, :as => :imageable
-  end
-  class Product < ActiveRecord::Base
-    attr_accessible :name
-    has_many :pictures, :as => :imageable
-  end
+    class Picture < ActiveRecord::Base
+      attr_accessible :imageable_id, :imageable_type, :name
+      belongs_to :imageable, :polymorphic => true
+    end
+    class Employee < ActiveRecord::Base
+      attr_accessible :name
+      has_many :pictures, :as => :imageable
+    end
+    class Product < ActiveRecord::Base
+      attr_accessible :name
+      has_many :pictures, :as => :imageable
+    end
 
 Test,
 
-  Employee.create(:name => 'Mennan')
-  Employee.first.pictures
-  Employee.first.pictures.create(:name => 'men.jpg', :imageable_type => 'r')
-  Employee.first.pictures.create(:name => 'nan.jpg', :imageable_type => 'r')
-  Employee.first.pictures
+    Employee.create(:name => 'Mennan')
+    Employee.first.pictures
+    Employee.first.pictures.create(:name => 'men.jpg', :imageable_type => 'r')
+    Employee.first.pictures.create(:name => 'nan.jpg', :imageable_type => 'r')
+    Employee.first.pictures
 
-  Product.first.pictures
+    Product.first.pictures
 
 ## 3.5 Bi-directional Associations
 
@@ -156,56 +156,56 @@ kısıtlamaları vardır.
 
 Bazı trikler,
 
-  > c = Customer.create(:name => 'Simitci')
-  > o = c.orders.create(:order_date => Time.now)
+    > c = Customer.create(:name => 'Simitci')
+    > o = c.orders.create(:order_date => Time.now)
 
-  > o.customer
-  > c.orders
+    > o.customer
+    > c.orders
 
-  > o.customer = Customer.create(:name => 'manav')
-  > o.customer.name
-  'manav'
+    > o.customer = Customer.create(:name => 'manav')
+    > o.customer.name
+    'manav'
 
-  > o.build_customer(:name => 'market')   # new
-  > o.create_customer(:name => 'market')  # create
-  > o.customer.name
-  'market'
+    > o.build_customer(:name => 'market')   # new
+    > o.create_customer(:name => 'market')  # create
+    > o.customer.name
+    'market'
 
 #### 4.1.2.7 :include
 
 Modeller,
 
-  class LineItem < ActiveRecord::Base
-    belongs_to :order
-  end
-  class Order < ActiveRecord::Base
-    belongs_to :customer
-    has_many :line_items
-  end
-  class Customer < ActiveRecord::Base
-    has_many :orders
-  end
+    class LineItem < ActiveRecord::Base
+      belongs_to :order
+    end
+    class Order < ActiveRecord::Base
+      belongs_to :customer
+      has_many :line_items
+    end
+    class Customer < ActiveRecord::Base
+      has_many :orders
+    end
 
 Test,
 
-  c = Customer.create(:name => 'yesil')
-  o = c.orders.create(:order_date => Time.now)
-  li = o.line_items.create(:name => 'foo')
+    c = Customer.create(:name => 'yesil')
+    o = c.orders.create(:order_date => Time.now)
+    li = o.line_items.create(:name => 'foo')
 
-  o.line_items
-  li.order_id
+    o.line_items
+    li.order_id
 
 eğer, `li` üzerinden `order` a ve onun üzerinden de `customer` a ulaşmak
 istersen,
 
-  class LineItem < ActiveRecord::Base
-    belongs_to :order, :include => :customer
-  end
+    class LineItem < ActiveRecord::Base
+      belongs_to :order, :include => :customer
+    end
 
 demen yeterli. Bu durumda,
 
-  li.order
-  li.order.customer
+    li.order
+    li.order.customer
 
 iş görür.
 
@@ -213,53 +213,53 @@ iş görür.
 
 Test,
 
-  if o.customer.nil?
-    @msg = "No customer found for this order"
-  end
+    if o.customer.nil?
+      @msg = "No customer found for this order"
+    end
 
 ## 4.3 hasmany Association Reference
 
 Customer i belirtmeksizin, yeni bir Order oluşturmak/sonuna eklemek,
 
-  > c.orders << Order.create(:order_date => Time.now)
+    > c.orders << Order.create(:order_date => Time.now)
 
 Son Order i silmek istersek,
 
-  > c.orders.delete(Order.last)
+    > c.orders.delete(Order.last)
 
 Order id lerini görmek istersen,
 
-  > c.order_ids
-  [14, 42]
+    > c.order_ids
+    [14, 42]
 
 Ekleme silme yapabilirsin,
 
-  > c.order_ids = [14, 23]
+    > c.order_ids = [14, 23]
 
 böylelikle arkada 42 id li Order silinirken, var olan 23 nolu id bu müşterinin
 Order u olur. Bu işlem öncesinde,
 
-  > Order.find(23).customer.name
-  'foo'
+    > Order.find(23).customer.name
+    'foo'
 
 iken işlem sonrasında,
 
-  > Order.find(23).customer.name
-  'bar'
+    > Order.find(23).customer.name
+    'bar'
 
 olacaktır ki `bar`, `c` değişkeninde tutulan müşterinin adıdır (`# c.name =>
 'bar'`).
 
 Ararken,
 
-  > @orders = c.orders.where(["order_date < ? ", 2.minutes.ago])
+    > @orders = c.orders.where(["order_date < ? ", 2.minutes.ago])
 
 böyle hazırlanır ya böyle
 
-  > @orders[0]
+    > @orders[0]
 
 ya da böyle,
 
-  > @orders.first
+    > @orders.first
 
 şeklinde veritabanından sorgulanır.
